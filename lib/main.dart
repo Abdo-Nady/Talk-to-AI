@@ -52,6 +52,12 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _controller = TextEditingController();
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void _sendMessage() async {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
@@ -128,6 +134,7 @@ class _ChatPageState extends State<ChatPage> {
                   child: TextField(
                     controller: _controller,
                     onSubmitted: (_) => _sendMessage(),
+                    enabled: !_isLoading,
                     decoration: const InputDecoration(
                       hintText: 'Say something...',
                       border: OutlineInputBorder(),
@@ -136,7 +143,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
-                  onPressed: _sendMessage,
+                  onPressed: _isLoading ? null : _sendMessage,
                   child: const Text("Send"),
                 )
               ],
